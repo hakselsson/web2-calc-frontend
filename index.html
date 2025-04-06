@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Web2.0 AI Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      margin: 0;
+      padding: 2rem;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background: #222;
+      padding: 2rem;
+      border-radius: 8px;
+      color: white;
+    }
+
+    h1 {
+      color: orange;
+    }
+
+    input, button {
+      font-size: 1rem;
+      padding: 0.6rem;
+      margin-top: 1rem;
+      width: 100%;
+    }
+
+    #result {
+      margin-top: 1rem;
+      font-size: 1.2rem;
+      color: limegreen;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>web2.0<small>calc</small></h1>
+    <input type="text" id="prompt" placeholder="Enter math question, e.g. '2^5 + sqrt(16)'" />
+    <button onclick="solve()">Calculate</button>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    const BACKEND_URL = "https://your-backend-url.onrender.com";
+
+    async function solve() {
+      const prompt = document.getElementById("prompt").value;
+      const resultBox = document.getElementById("result");
+      resultBox.textContent = "Calculating...";
+
+      try {
+        const res = await fetch(`${BACKEND_URL}/api/solve`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ prompt }),
+        });
+
+        const data = await res.json();
+        resultBox.textContent = data.result || "Error.";
+      } catch (error) {
+        resultBox.textContent = "Failed to connect to backend.";
+      }
+    }
+  </script>
+</body>
+</html>
